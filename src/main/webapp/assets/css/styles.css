@@ -1,0 +1,136 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f9f9f9;
+    color: #000000;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    box-sizing: border-box;
+}
+
+h1 {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: 700;
+}
+
+hr {
+    border: 0;
+    border-top: 1px solid #000000;
+    margin: 20px 0;
+}
+
+a {
+    display: inline-block;
+    padding: 8px 16px;
+    border: 1px solid #000000;
+    background-color: transparent;
+    color: #000000;
+    text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+}
+
+a:hover {
+    background-color: #000000;
+    color: #ffffff;
+    transform: scale(1.05);
+}
+
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 20px 0;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #000000;
+}
+
+th {
+    background-color: #f0f0f0;
+    font-weight: 700;
+}
+
+tr:last-child td {
+    border-bottom: none;
+}
+
+form {
+    width: 100%;
+    margin: 20px 0;
+}
+
+label {
+    margin-bottom: 8px;
+    font-weight: 700;
+}
+
+input[type="text"],
+textarea {
+    padding: 10px;
+    border: 1px solid #000000;
+    margin-bottom: 15px;
+    font-size: 1em;
+    width: 100%;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+    background-color: #ffffff;
+    transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus,
+textarea:focus {
+    border-color: #000000;
+    outline: none;
+}
+
+textarea {
+    height: 100px;
+}
+
+input[type="checkbox"] {
+    margin-left: 10px;
+}
+
+input[type="submit"] {
+    padding: 10px 20px;
+    border: 1px solid #000000;
+    background-color: transparent;
+    color: #000000;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+    font-family: 'Roboto', sans-serif;
+}
+
+input[type="submit"]:hover {
+    background-color: #000000;
+    color: #ffffff;
+    transform: scale(1.05);
+}
+
+p {
+    margin: 20px 0;
+    text-align: center;
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 600px) {
+    body {
+        padding: 20px 10px;
+    }
+
+    h1 {
+        font-size: 2em;
+    }
+
+    table, form {
+        width: 100%;
+    }
+}
