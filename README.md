@@ -72,9 +72,9 @@ private static final String PASSWORD = "your_password";
 #### Manual Setup
 1. Create a new Dynamic Web Project
 2. Add the following JARs to WEB-INF/lib:
-- javax.servlet-api-3.1.0.jar
-- mysql-connector-java-8.0.27.jar
-- jstl-1.2.jar
+   - javax.servlet-api-3.1.0.jar
+   - mysql-connector-java-8.0.27.jar
+   - jstl-1.2.jar
 3. Configure build path to include these JARs
 
 ### 5. Configure Tomcat Server
@@ -161,35 +161,35 @@ public class TodoDAO {
 Students can enhance the project by adding:
 
 1. User Authentication
-- Login/Register functionality
-- User-specific todos
-- Session management
+   - Login/Register functionality
+   - User-specific todos
+   - Session management
 
 2. Todo Features
-- Todo categories/tags
-- Priority levels
-- Due date notifications
-- Status tracking
+   - Todo categories/tags
+   - Priority levels
+   - Due date notifications
+   - Status tracking
 
 3. UI Enhancements
-- Responsive design
-- Dark/Light theme
-- Search and filter todos
-- Sorting options
+   - Responsive design
+   - Dark/Light theme
+   - Search and filter todos
+   - Sorting options
 
 4. API Integration
-- RESTful API endpoints
-- JSON response format
-- API documentation
+   - RESTful API endpoints
+   - JSON response format
+   - API documentation
 
 ## 🤝 Contributing
 
 1. Fork the repository
 2. Create your feature branch (`git checkout -b feature/NewFeature`)
 3. Implement your feature
-- Follow existing code structure
-- Add appropriate comments
-- Include unit tests
+   - Follow existing code structure
+   - Add appropriate comments
+   - Include unit tests
 4. Commit changes (`git commit -m 'Add NewFeature'`)
 5. Push to branch (`git push origin feature/NewFeature`)
 6. Open a Pull Request with detailed description
