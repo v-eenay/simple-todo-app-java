@@ -131,9 +131,9 @@ public class TodoModel {
 ```java
 public class TodoDAO {
    // Database operations
-   public static int addTodo(TodoModel todoModel)
-   public static ArrayList<TodoModel> listTodos()
-   public static boolean deleteTodo(TodoModel todoModel)
+   public static int addTodo(TodoModel todoModel);
+   public static ArrayList<TodoModel> listTodos();
+   public static boolean deleteTodo(TodoModel todoModel);
 }
 ```
 
