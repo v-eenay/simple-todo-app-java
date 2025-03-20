@@ -3,42 +3,22 @@
 <head>
     <title>Login - Todo Application</title>
     <link rel="stylesheet" type="text/css" href="../assets/css/styles.css">
-    <style>
-        .form-container {
-            max-width: 400px;
-            margin: 0 auto;
-            padding: 20px;
-            border: 1px solid #000;
-            background-color: #fff;
-        }
-
-        .error-message {
-            color: #ff0000;
-            margin-bottom: 15px;
-            text-align: center;
-            font-weight: bold;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-actions {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 20px;
-        }
-    </style>
 </head>
 <body>
 <h1>Login to Todo Application</h1>
 <hr/>
 
-<div class="form-container">
+<div class="form-container login-container">
     <% if(request.getAttribute("errorMessage") != null) { %>
     <div class="error-message">
         <%= request.getAttribute("errorMessage") %>
+    </div>
+    <% } %>
+
+    <% if(session.getAttribute("registrationSuccess") != null) { %>
+    <div class="success-message">
+        <%= session.getAttribute("registrationSuccess") %>
+        <% session.removeAttribute("registrationSuccess"); %>
     </div>
     <% } %>
 

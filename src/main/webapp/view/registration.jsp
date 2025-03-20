@@ -3,39 +3,6 @@
 <head>
     <title>Register - Todo Application</title>
     <link rel="stylesheet" type="text/css" href="../assets/css/styles.css">
-    <style>
-        .form-container {
-            max-width: 500px;
-            margin: 0 auto;
-            padding: 20px;
-            border: 1px solid #000;
-            background-color: #fff;
-        }
-
-        .error-message {
-            color: #ff0000;
-            margin-bottom: 15px;
-            text-align: center;
-            font-weight: bold;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-actions {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 20px;
-        }
-
-        .password-requirements {
-            font-size: 0.8em;
-            color: #666;
-            margin-top: 5px;
-        }
-    </style>
 </head>
 <body>
 <h1>Register for Todo Application</h1>
@@ -48,7 +15,7 @@
     </div>
     <% } %>
 
-    <form action="RegisterUserServlet" method="post" onsubmit="return validateForm()">
+    <form action="../RegisterUserServlet" method="post" onsubmit="return validateForm()">
         <div class="form-group">
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" required>
