@@ -1,42 +1,60 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+    --primary-color: #4361ee;
+    --text-color: #333333;
+    --border-color: #e0e0e0;
+    --background-color: #f8f9fa;
+    --error-color: #e63946;
+    --success-color: #2a9d8f;
+    --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --input-radius: 6px;
+    --card-radius: 8px;
+    --transition: all 0.3s ease;
+}
 
 body {
-    font-family: 'Roboto', sans-serif;
-    background-color: #f9f9f9;
-    color: #000000;
-    max-width: 800px;
+    font-family: 'Inter', sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    max-width: 900px;
     margin: 0 auto;
     padding: 40px 20px;
     box-sizing: border-box;
+    line-height: 1.6;
 }
 
 h1 {
-    font-size: 2.5em;
+    font-size: 2rem;
     margin-bottom: 20px;
     text-align: center;
     font-weight: 700;
+    color: var(--primary-color);
 }
 
 hr {
     border: 0;
-    border-top: 1px solid #000000;
+    border-top: 1px solid var(--border-color);
     margin: 20px 0;
 }
 
 a {
     display: inline-block;
     padding: 8px 16px;
-    border: 1px solid #000000;
+    border: 1px solid var(--primary-color);
     background-color: transparent;
-    color: #000000;
+    color: var(--primary-color);
     text-decoration: none;
-    transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+    border-radius: var(--input-radius);
+    font-weight: 500;
+    transition: var(--transition);
 }
 
 a:hover {
-    background-color: #000000;
-    color: #ffffff;
-    transform: scale(1.05);
+    background-color: var(--primary-color);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: var(--box-shadow);
 }
 
 table {
@@ -44,21 +62,28 @@ table {
     border-collapse: separate;
     border-spacing: 0;
     margin: 20px 0;
+    border-radius: var(--card-radius);
+    overflow: hidden;
+    box-shadow: var(--box-shadow);
 }
 
 th, td {
-    padding: 12px;
+    padding: 14px;
     text-align: left;
-    border-bottom: 1px solid #000000;
+    border-bottom: 1px solid var(--border-color);
 }
 
 th {
-    background-color: #f0f0f0;
-    font-weight: 700;
+    background-color: #f0f2f5;
+    font-weight: 600;
 }
 
 tr:last-child td {
     border-bottom: none;
+}
+
+tr:hover {
+    background-color: rgba(67, 97, 238, 0.05);
 }
 
 form {
@@ -68,55 +93,66 @@ form {
 
 label {
     margin-bottom: 8px;
-    font-weight: 700;
+    font-weight: 500;
+    display: block;
+    color: var(--text-color);
 }
 
 input[type="text"],
 input[type="email"],
 input[type="password"],
 textarea {
-    padding: 10px;
-    border: 1px solid #000000;
+    padding: 10px 14px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--input-radius);
     margin-bottom: 15px;
-    font-size: 1em;
+    font-size: 1rem;
     width: 100%;
     box-sizing: border-box;
-    font-family: 'Roboto', sans-serif;
-    background-color: #ffffff;
-    transition: border-color 0.3s ease;
+    font-family: 'Inter', sans-serif;
+    background-color: white;
+    transition: var(--transition);
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 input[type="text"]:focus,
 input[type="email"]:focus,
 input[type="password"]:focus,
 textarea:focus {
-    border-color: #000000;
+    border-color: var(--primary-color);
     outline: none;
+    box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15);
 }
 
 textarea {
-    height: 100px;
+    min-height: 100px;
+    resize: vertical;
 }
 
 input[type="checkbox"] {
-    margin-left: 10px;
+    margin-right: 8px;
+    transform: scale(1.2);
 }
 
 input[type="submit"] {
-    padding: 10px 20px;
-    border: 1px solid #000000;
-    background-color: transparent;
-    color: #000000;
-    font-size: 1em;
+    padding: 10px 16px;
+    border: none;
+    background-color: var(--primary-color);
+    color: white;
+    font-size: 1rem;
+    font-weight: 500;
+    border-radius: var(--input-radius);
     cursor: pointer;
-    transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
-    font-family: 'Roboto', sans-serif;
+    transition: var(--transition);
+    font-family: 'Inter', sans-serif;
+    width: auto;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 input[type="submit"]:hover {
-    background-color: #000000;
-    color: #ffffff;
-    transform: scale(1.05);
+    background-color: #3a56d4;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 p {
@@ -126,33 +162,33 @@ p {
 
 /* Login and Registration Styles */
 .form-container {
-    max-width: 500px;
+    max-width: 450px;
     margin: 0 auto;
-    padding: 25px;
-    border: 1px solid #000;
-    background-color: #fff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 4px;
+    padding: 30px;
+    border: 1px solid var(--border-color);
+    background-color: white;
+    box-shadow: var(--box-shadow);
+    border-radius: var(--card-radius);
 }
 
 .error-message {
-    color: #ff0000;
+    color: var(--error-color);
     margin-bottom: 15px;
     text-align: center;
-    font-weight: bold;
+    font-weight: 500;
     padding: 10px;
-    background-color: #ffe6e6;
-    border-radius: 4px;
+    background-color: rgba(230, 57, 70, 0.1);
+    border-radius: var(--input-radius);
 }
 
 .success-message {
-    color: #008000;
+    color: var(--success-color);
     margin-bottom: 15px;
     text-align: center;
-    font-weight: bold;
+    font-weight: 500;
     padding: 10px;
-    background-color: #e6ffe6;
-    border-radius: 4px;
+    background-color: rgba(42, 157, 143, 0.1);
+    border-radius: var(--input-radius);
 }
 
 .form-group {
@@ -169,21 +205,25 @@ p {
     justify-content: space-between;
     align-items: center;
     margin-top: 25px;
+    gap: 15px;
 }
 
 .form-actions a {
-    font-size: 0.9em;
+    font-size: 0.9rem;
+    padding: 10px 16px;
+    flex: 1;
+    text-align: center;
+}
+
+.form-actions input[type="submit"] {
+    flex: 1;
 }
 
 .password-requirements {
-    font-size: 0.8em;
-    color: #666;
+    font-size: 0.8rem;
+    color: #6c757d;
     margin-top: 5px;
     margin-bottom: 10px;
-}
-
-.login-container {
-    max-width: 400px;
 }
 
 /* Media Queries for Responsiveness */
@@ -193,7 +233,7 @@ p {
     }
 
     h1 {
-        font-size: 2em;
+        font-size: 1.8rem;
     }
 
     table, form {
@@ -201,7 +241,7 @@ p {
     }
 
     .form-container {
-        padding: 15px;
+        padding: 20px;
     }
 
     .form-actions {
@@ -209,12 +249,8 @@ p {
         gap: 15px;
     }
 
-    .form-actions a {
-        width: 100%;
-        text-align: center;
-    }
-
-    input[type="submit"] {
+    .form-actions a,
+    .form-actions input[type="submit"] {
         width: 100%;
     }
 }
