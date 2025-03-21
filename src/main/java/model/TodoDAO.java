@@ -1,37 +1,35 @@
 package model;
 
+import util.DatabaseUtil;
+
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.Date;
+import java.util.List;
 
 public class TodoDAO {
-    // Instance variables for connecting to the database
-    private static final String URL = "jdbc:mysql://localhost:3306/todo_database";
-    private static final String USER = "root";
-    private static final String PASSWORD = "";
-
-    static {
-        // Load the MySQL JDBC driver
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException("Failed to load MySQL driver", e);
-        }
-    }
-
-    // Method to establish a database connection
-    public static Connection getConnection(String url, String user, String password) throws SQLException {
-        return DriverManager.getConnection(url, user, password);
-    }
 
     // Method to add a todo to the database and return its generated ID
     public static int addTodo(TodoModel todoModel) throws SQLException {
-        String query = "INSERT INTO todo_table (title, description, completed) VALUES (?, ?, ?)";
-        try (Connection conn = getConnection(URL, USER, PASSWORD);
+        String query = "INSERT INTO todo_table (user_id, title, description, completed, category, priority, due_date, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement ps = conn.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)) {
-            ps.setString(1, todoModel.getTitle());
-            ps.setString(2, todoModel.getDescription());
-            ps.setBoolean(3, todoModel.getCompleted());
+            ps.setInt(1, todoModel.getUserId());
+            ps.setString(2, todoModel.getTitle());
+            ps.setString(3, todoModel.getDescription());
+            ps.setBoolean(4, todoModel.getCompleted());
+            ps.setString(5, todoModel.getCategory());
+            ps.setInt(6, todoModel.getPriority());
+            
+            // Handle null due date
+            if (todoModel.getDueDate() != null) {
+                ps.setDate(7, new java.sql.Date(todoModel.getDueDate().getTime()));
+            } else {
+                ps.setNull(7, Types.DATE);
+            }
+            
+            ps.setString(8, todoModel.getStatus());
+            
             int affectedRows = ps.executeUpdate();
             if (affectedRows > 0) {
                 try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
@@ -49,10 +47,11 @@ public class TodoDAO {
 
     // Method to remove a todo from the database
     public static boolean removeTodo(TodoModel todoModel) {
-        String query = "DELETE FROM todo_table WHERE id = ?";
-        try (Connection conn = getConnection(URL, USER, PASSWORD);
+        String query = "DELETE FROM todo_table WHERE id = ? AND user_id = ?";
+        try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement ps = conn.prepareStatement(query)) {
             ps.setInt(1, todoModel.getId());
+            ps.setInt(2, todoModel.getUserId());
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -60,19 +59,52 @@ public class TodoDAO {
         }
     }
 
-    // Method to list all todos from the database
+    // Method to list all todos from the database for a specific user
+    public static List<TodoModel> listTodosByUser(int userId) {
+        List<TodoModel> todos = new ArrayList<>();
+        String query = "SELECT * FROM todo_table WHERE user_id = ?";
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setInt(1, userId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    int id = rs.getInt("id");
+                    String title = rs.getString("title");
+                    String description = rs.getString("description");
+                    boolean completed = rs.getBoolean("completed");
+                    String category = rs.getString("category");
+                    int priority = rs.getInt("priority");
+                    Date dueDate = rs.getDate("due_date");
+                    String status = rs.getString("status");
+                    
+                    todos.add(new TodoModel(id, userId, title, description, completed, category, priority, dueDate, status));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return todos;
+    }
+    
+    // Method to list all todos from the database (for backward compatibility)
     public static ArrayList<TodoModel> listTodo() {
         ArrayList<TodoModel> todos = new ArrayList<>();
         String query = "SELECT * FROM todo_table";
-        try (Connection conn = getConnection(URL, USER, PASSWORD);
+        try (Connection conn = DatabaseUtil.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(query)) {
             while (rs.next()) {
                 int id = rs.getInt("id");
+                int userId = rs.getInt("user_id");
                 String title = rs.getString("title");
                 String description = rs.getString("description");
                 boolean completed = rs.getBoolean("completed");
-                todos.add(new TodoModel(id, title, description, completed));
+                String category = rs.getString("category");
+                int priority = rs.getInt("priority");
+                Date dueDate = rs.getDate("due_date");
+                String status = rs.getString("status");
+                
+                todos.add(new TodoModel(id, userId, title, description, completed, category, priority, dueDate, status));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -80,75 +112,182 @@ public class TodoDAO {
         return todos;
     }
 
-    // Main method with a menu-driven interface
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        while (true) {
-            // Display the menu
-            System.out.println("\n=== Todo Application Menu ===");
-            System.out.println("1. Add Todo");
-            System.out.println("2. Remove Todo");
-            System.out.println("3. List Todos");
-            System.out.println("4. Exit");
-            System.out.print("Choose an option: ");
-
-            int choice = scanner.nextInt();
-            scanner.nextLine(); // Consume the newline character
-
-            switch (choice) {
-                case 1: // Add a new todo
-                    System.out.print("Enter title: ");
-                    String title = scanner.nextLine();
-                    System.out.print("Enter description: ");
-                    String description = scanner.nextLine();
-                    System.out.print("Is completed (true/false): ");
-                    boolean completed = scanner.nextBoolean();
-                    TodoModel newTodo = new TodoModel(0, title, description, completed);
-                    try {
-                        int newId = addTodo(newTodo);
-                        if (newId != -1) {
-                            System.out.printf("Todo added successfully with ID: %d%n", newId);
-                        } else {
-                            System.out.println("Failed to add todo.");
-                        }
-                    } catch (SQLException e) {
-                        System.out.println("Error adding todo:");
-                        e.printStackTrace();
-                    }
-                    break;
-
-                case 2: // Remove a todo by ID
-                    System.out.print("Enter todo ID to remove: ");
-                    int idToRemove = scanner.nextInt();
-                    TodoModel todoToRemove = new TodoModel(idToRemove, "", "", false);
-                    if (removeTodo(todoToRemove)) {
-                        System.out.println("Todo removed successfully.");
-                    } else {
-                        System.out.println("Failed to remove todo or todo not found.");
-                    }
-                    break;
-
-                case 3: // List all todos
-                    ArrayList<TodoModel> todos = listTodo();
-                    if (todos.isEmpty()) {
-                        System.out.println("No todos found.");
-                    } else {
-                        System.out.println("\n=== Todo List ===");
-                        for (TodoModel todo : todos) {
-                            System.out.printf("ID: %-4d | Title: %-20s | Description: %-30s | Completed: %b%n",
-                                    todo.getId(), todo.getTitle(), todo.getDescription(), todo.getCompleted());
-                        }
-                    }
-                    break;
-
-                case 4: // Exit the application
-                    System.out.println("Exiting Todo Application...");
-                    scanner.close();
-                    return;
-
-                default:
-                    System.out.println("Invalid choice. Please select a valid option (1-4).");
+    // Method to update a todo in the database
+    public static boolean updateTodo(TodoModel todoModel) {
+        String query = "UPDATE todo_table SET title = ?, description = ?, completed = ?, category = ?, priority = ?, due_date = ?, status = ? WHERE id = ? AND user_id = ?";
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setString(1, todoModel.getTitle());
+            ps.setString(2, todoModel.getDescription());
+            ps.setBoolean(3, todoModel.getCompleted());
+            ps.setString(4, todoModel.getCategory());
+            ps.setInt(5, todoModel.getPriority());
+            
+            // Handle null due date
+            if (todoModel.getDueDate() != null) {
+                ps.setDate(6, new java.sql.Date(todoModel.getDueDate().getTime()));
+            } else {
+                ps.setNull(6, Types.DATE);
             }
+            
+            ps.setString(7, todoModel.getStatus());
+            ps.setInt(8, todoModel.getId());
+            ps.setInt(9, todoModel.getUserId());
+            
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
         }
+    }
+    
+    // Method to get a todo by ID
+    public static TodoModel getTodoById(int todoId, int userId) {
+        String query = "SELECT * FROM todo_table WHERE id = ? AND user_id = ?";
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setInt(1, todoId);
+            ps.setInt(2, userId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    String title = rs.getString("title");
+                    String description = rs.getString("description");
+                    boolean completed = rs.getBoolean("completed");
+                    String category = rs.getString("category");
+                    int priority = rs.getInt("priority");
+                    Date dueDate = rs.getDate("due_date");
+                    String status = rs.getString("status");
+                    
+                    return new TodoModel(todoId, userId, title, description, completed, category, priority, dueDate, status);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
+    // Method to filter todos by category
+    public static List<TodoModel> filterTodosByCategory(int userId, String category) {
+        List<TodoModel> todos = new ArrayList<>();
+        String query = "SELECT * FROM todo_table WHERE user_id = ? AND category = ?";
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setInt(1, userId);
+            ps.setString(2, category);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    int id = rs.getInt("id");
+                    String title = rs.getString("title");
+                    String description = rs.getString("description");
+                    boolean completed = rs.getBoolean("completed");
+                    int priority = rs.getInt("priority");
+                    Date dueDate = rs.getDate("due_date");
+                    String status = rs.getString("status");
+                    
+                    todos.add(new TodoModel(id, userId, title, description, completed, category, priority, dueDate, status));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return todos;
+    }
+    
+    // Method to filter todos by priority
+    public static List<TodoModel> filterTodosByPriority(int userId, int priority) {
+        List<TodoModel> todos = new ArrayList<>();
+        String query = "SELECT * FROM todo_table WHERE user_id = ? AND priority = ?";
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setInt(1, userId);
+            ps.setInt(2, priority);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    int id = rs.getInt("id");
+                    String title = rs.getString("title");
+                    String description = rs.getString("description");
+                    boolean completed = rs.getBoolean("completed");
+                    String category = rs.getString("category");
+                    Date dueDate = rs.getDate("due_date");
+                    String status = rs.getString("status");
+                    
+                    todos.add(new TodoModel(id, userId, title, description, completed, category, priority, dueDate, status));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return todos;
+    }
+    
+    // Method to filter todos by status
+    public static List<TodoModel> filterTodosByStatus(int userId, String status) {
+        List<TodoModel> todos = new ArrayList<>();
+        String query = "SELECT * FROM todo_table WHERE user_id = ? AND status = ?";
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setInt(1, userId);
+            ps.setString(2, status);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    int id = rs.getInt("id");
+                    String title = rs.getString("title");
+                    String description = rs.getString("description");
+                    boolean completed = rs.getBoolean("completed");
+                    String category = rs.getString("category");
+                    int priority = rs.getInt("priority");
+                    Date dueDate = rs.getDate("due_date");
+                    
+                    todos.add(new TodoModel(id, userId, title, description, completed, category, priority, dueDate, status));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return todos;
+    }
+    
+    // Method to get all categories
+    public static List<String> getAllCategories() {
+        List<String> categories = new ArrayList<>();
+        String query = "SELECT name FROM categories ORDER BY name";
+        try (Connection conn = DatabaseUtil.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+            while (rs.next()) {
+                categories.add(rs.getString("name"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return categories;
+    }
+    
+    // Method to get overdue todos
+    public static List<TodoModel> getOverdueTodos(int userId) {
+        List<TodoModel> todos = new ArrayList<>();
+        String query = "SELECT * FROM todo_table WHERE user_id = ? AND due_date < CURRENT_DATE() AND status != 'Completed'";
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setInt(1, userId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    int id = rs.getInt("id");
+                    String title = rs.getString("title");
+                    String description = rs.getString("description");
+                    boolean completed = rs.getBoolean("completed");
+                    String category = rs.getString("category");
+                    int priority = rs.getInt("priority");
+                    Date dueDate = rs.getDate("due_date");
+                    String status = rs.getString("status");
+                    
+                    todos.add(new TodoModel(id, userId, title, description, completed, category, priority, dueDate, status));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return todos;
     }
 }
