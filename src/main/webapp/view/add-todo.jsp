@@ -1,112 +1,42 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" errorPage="./error.jsp" %>
+<!DOCTYPE html>
 <html>
 <head>
     <title>Add Todo</title>
-    <style>
-        <%@ include file="../assets/css/styles.css"%>
-        
-        /* Additional retro styling */
-        body {
-            font-family: 'Courier New', monospace;
-            background-color: #f5f5dc;
-            color: #333;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
-        
-        h1 {
-            text-align: center;
-            color: #333;
-            border-bottom: 2px solid #333;
-            padding-bottom: 10px;
-            font-weight: bold;
-        }
-        
-        form {
-            width: 100%;
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #eee8cd;
-            border: 2px solid #333;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-        }
-        
-        input[type="text"], textarea {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 20px;
-            border: 1px solid #333;
-            background-color: #f5f5dc;
-            font-family: 'Courier New', monospace;
-        }
-        
-        .checkbox-group {
-            margin-bottom: 20px;
-        }
-        
-        input[type="submit"] {
-            background-color: #d3d3d3;
-            color: #333;
-            border: 1px solid #333;
-            padding: 10px 20px;
-            cursor: pointer;
-            font-weight: bold;
-            font-family: 'Courier New', monospace;
-            display: block;
-            margin: 0 auto;
-        }
-        
-        input[type="submit"]:hover {
-            background-color: #333;
-            color: #f5f5dc;
-        }
-        
-        .home-link {
-            text-align: center;
-            margin-top: 20px;
-        }
-        
-        .home-link a {
-            display: inline-block;
-            padding: 8px 16px;
-            background-color: #d3d3d3;
-            color: #333;
-            border: 1px solid #333;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        
-        .home-link a:hover {
-            background-color: #333;
-            color: #f5f5dc;
-        }
-    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-<h1>Add a New Todo</h1>
-<form action="${pageContext.request.contextPath}/AddTodoServlet" method="post">
-    <label for="title">Title:</label>
-    <input type="text" id="title" name="title" required>
-    
-    <label for="description">Description:</label>
-    <textarea id="description" name="description" required></textarea>
-    
-    <div class="checkbox-group">
-        <label for="completed">Completed:</label>
-        <input type="checkbox" id="completed" name="completed">
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Add Todo</h3>
+                </div>
+                <div class="card-body">
+                    <form action="${pageContext.request.contextPath}/add-todo" method="post">
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Title</label>
+                            <input type="text" class="form-control" id="title" name="title" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description</label>
+                            <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="completed" name="completed">
+                            <label class="form-check-label" for="completed">Completed</label>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <a href="${pageContext.request.contextPath}/list-todo" class="btn btn-secondary">Cancel</a>
+                            <button type="submit" class="btn btn-primary">Add Todo</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-    
-    <input type="submit" value="Add Todo">
-</form>
-<div class="home-link">
-    <a href="${pageContext.request.contextPath}/index.jsp">Back to Home</a>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

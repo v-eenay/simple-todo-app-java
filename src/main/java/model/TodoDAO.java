@@ -2,13 +2,14 @@ package model;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.List;
+import util.DatabaseUtil;
 
 public class TodoDAO {
     // Instance variables for connecting to the database
-    private static final String URL = "jdbc:mysql://localhost:3306/todo_database";
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/todo_db";
     private static final String USER = "root";
-    private static final String PASSWORD = "";
+    private static final String PASS = "";
 
     static {
         // Load the MySQL JDBC driver
@@ -20,171 +21,97 @@ public class TodoDAO {
     }
 
     // Method to establish a database connection
-    public static Connection getConnection(String url, String user, String password) throws SQLException {
-        return DriverManager.getConnection(url, user, password);
+    private static Connection getConnection() throws SQLException {
+        return DriverManager.getConnection(DB_URL, USER, PASS);
     }
 
-    // Method to add a todo to the database and return its generated ID
-    public static int addTodo(TodoModel todoModel) throws SQLException {
-        String query = "INSERT INTO todo_table (title, description, completed) VALUES (?, ?, ?)";
-        try (Connection conn = getConnection(URL, USER, PASSWORD);
-             PreparedStatement ps = conn.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)) {
-            ps.setString(1, todoModel.getTitle());
-            ps.setString(2, todoModel.getDescription());
-            ps.setBoolean(3, todoModel.getCompleted());
-            int affectedRows = ps.executeUpdate();
-            if (affectedRows > 0) {
-                try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
-                    if (generatedKeys.next()) {
-                        return generatedKeys.getInt(1);
-                    }
+    public List<TodoModel> getAllTodos(int userId) throws SQLException {
+        List<TodoModel> todos = new ArrayList<>();
+        String sql = "SELECT * FROM todos WHERE user_id = ? ORDER BY id DESC";
+        
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+            pstmt.setInt(1, userId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    todos.add(new TodoModel(
+                        rs.getInt("id"),
+                        rs.getString("title"),
+                        rs.getString("description"),
+                        rs.getBoolean("completed"),
+                        rs.getInt("user_id")
+                    ));
                 }
             }
-            return -1; // Indicate failure if no ID is generated
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return -1;
-        }
-    }
-
-    // Method to remove a todo from the database
-    public static boolean removeTodo(TodoModel todoModel) {
-        String query = "DELETE FROM todo_table WHERE id = ?";
-        try (Connection conn = getConnection(URL, USER, PASSWORD);
-             PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setInt(1, todoModel.getId());
-            return ps.executeUpdate() > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    // Method to list all todos from the database
-    public static ArrayList<TodoModel> listTodo() {
-        ArrayList<TodoModel> todos = new ArrayList<>();
-        String query = "SELECT * FROM todo_table";
-        try (Connection conn = getConnection(URL, USER, PASSWORD);
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(query)) {
-            while (rs.next()) {
-                int id = rs.getInt("id");
-                String title = rs.getString("title");
-                String description = rs.getString("description");
-                boolean completed = rs.getBoolean("completed");
-                todos.add(new TodoModel(id, title, description, completed));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
         return todos;
     }
 
-    // Method to get a single todo by ID
-    public static TodoModel getTodoById(int id) {
-        String query = "SELECT * FROM todo_table WHERE id = ?";
-        try (Connection conn = getConnection(URL, USER, PASSWORD);
-             PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setInt(1, id);
-            try (ResultSet rs = ps.executeQuery()) {
+    public TodoModel getTodoById(int id, int userId) throws SQLException {
+        String sql = "SELECT * FROM todos WHERE id = ? AND user_id = ?";
+        
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+            pstmt.setInt(1, id);
+            pstmt.setInt(2, userId);
+            try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
-                    String title = rs.getString("title");
-                    String description = rs.getString("description");
-                    boolean completed = rs.getBoolean("completed");
-                    return new TodoModel(id, title, description, completed);
+                    return new TodoModel(
+                        rs.getInt("id"),
+                        rs.getString("title"),
+                        rs.getString("description"),
+                        rs.getBoolean("completed"),
+                        rs.getInt("user_id")
+                    );
                 }
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
         return null;
     }
 
-    // Method to update an existing todo
-    public static boolean updateTodo(TodoModel todoModel) {
-        String query = "UPDATE todo_table SET title = ?, description = ?, completed = ? WHERE id = ?";
-        try (Connection conn = getConnection(URL, USER, PASSWORD);
-             PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setString(1, todoModel.getTitle());
-            ps.setString(2, todoModel.getDescription());
-            ps.setBoolean(3, todoModel.getCompleted());
-            ps.setInt(4, todoModel.getId());
-            return ps.executeUpdate() > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
+    public void addTodo(TodoModel todo) throws SQLException {
+        String sql = "INSERT INTO todos (title, description, completed, user_id) VALUES (?, ?, ?, ?)";
+        
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+            pstmt.setString(1, todo.getTitle());
+            pstmt.setString(2, todo.getDescription());
+            pstmt.setBoolean(3, todo.isCompleted());
+            pstmt.setInt(4, todo.getUserId());
+            
+            pstmt.executeUpdate();
         }
     }
 
-    // Main method with a menu-driven interface
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        while (true) {
-            // Display the menu
-            System.out.println("\n=== Todo Application Menu ===");
-            System.out.println("1. Add Todo");
-            System.out.println("2. Remove Todo");
-            System.out.println("3. List Todos");
-            System.out.println("4. Exit");
-            System.out.print("Choose an option: ");
+    public void updateTodo(TodoModel todo) throws SQLException {
+        String sql = "UPDATE todos SET title = ?, description = ?, completed = ? WHERE id = ? AND user_id = ?";
+        
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+            pstmt.setString(1, todo.getTitle());
+            pstmt.setString(2, todo.getDescription());
+            pstmt.setBoolean(3, todo.isCompleted());
+            pstmt.setInt(4, todo.getId());
+            pstmt.setInt(5, todo.getUserId());
+            
+            pstmt.executeUpdate();
+        }
+    }
 
-            int choice = scanner.nextInt();
-            scanner.nextLine(); // Consume the newline character
-
-            switch (choice) {
-                case 1: // Add a new todo
-                    System.out.print("Enter title: ");
-                    String title = scanner.nextLine();
-                    System.out.print("Enter description: ");
-                    String description = scanner.nextLine();
-                    System.out.print("Is completed (true/false): ");
-                    boolean completed = scanner.nextBoolean();
-                    TodoModel newTodo = new TodoModel(0, title, description, completed);
-                    try {
-                        int newId = addTodo(newTodo);
-                        if (newId != -1) {
-                            System.out.printf("Todo added successfully with ID: %d%n", newId);
-                        } else {
-                            System.out.println("Failed to add todo.");
-                        }
-                    } catch (SQLException e) {
-                        System.out.println("Error adding todo:");
-                        e.printStackTrace();
-                    }
-                    break;
-
-                case 2: // Remove a todo by ID
-                    System.out.print("Enter todo ID to remove: ");
-                    int idToRemove = scanner.nextInt();
-                    TodoModel todoToRemove = new TodoModel(idToRemove, "", "", false);
-                    if (removeTodo(todoToRemove)) {
-                        System.out.println("Todo removed successfully.");
-                    } else {
-                        System.out.println("Failed to remove todo or todo not found.");
-                    }
-                    break;
-
-                case 3: // List all todos
-                    ArrayList<TodoModel> todos = listTodo();
-                    if (todos.isEmpty()) {
-                        System.out.println("No todos found.");
-                    } else {
-                        System.out.println("\n=== Todo List ===");
-                        for (TodoModel todo : todos) {
-                            System.out.printf("ID: %-4d | Title: %-20s | Description: %-30s | Completed: %b%n",
-                                    todo.getId(), todo.getTitle(), todo.getDescription(), todo.getCompleted());
-                        }
-                    }
-                    break;
-
-                case 4: // Exit the application
-                    System.out.println("Exiting Todo Application...");
-                    scanner.close();
-                    return;
-
-                default:
-                    System.out.println("Invalid choice. Please select a valid option (1-4).");
-            }
+    public void deleteTodo(int id, int userId) throws SQLException {
+        String sql = "DELETE FROM todos WHERE id = ? AND user_id = ?";
+        
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+            pstmt.setInt(1, id);
+            pstmt.setInt(2, userId);
+            
+            pstmt.executeUpdate();
         }
     }
 }

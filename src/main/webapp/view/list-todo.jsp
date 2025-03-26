@@ -1,121 +1,55 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="java.util.List, model.TodoModel" %>
-<html>
+<%@ page import="model.UserModel" %>
+<%@ page import="model.TodoModel" %>
+<%@ page import="java.util.List" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" errorPage="error.jsp" %>
+<!DOCTYPE html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Todo List</title>
-    <%--    <link rel="stylesheet" type="text/css" href="../assets/css/styles.css">--%>
-    <style>
-        <%@ include file="../assets/css/styles.css"%>
-        
-        /* Additional retro styling */
-        body {
-            font-family: 'Courier New', monospace;
-            background-color: #f5f5dc;
-            color: #333;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
-        
-        h1 {
-            text-align: center;
-            color: #333;
-            border-bottom: 2px solid #333;
-            padding-bottom: 10px;
-            font-weight: bold;
-        }
-        
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            border: 2px solid #333;
-            margin: 20px 0;
-        }
-        
-        th, td {
-            padding: 12px;
-            text-align: left;
-            border: 1px solid #333;
-        }
-        
-        th {
-            background-color: #d3d3d3;
-            font-weight: bold;
-        }
-        
-        tr:nth-child(even) {
-            background-color: #eee8cd;
-        }
-        
-        a {
-            display: inline-block;
-            padding: 5px 10px;
-            margin: 0 5px;
-            background-color: #d3d3d3;
-            color: #333;
-            border: 1px solid #333;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        
-        a:hover {
-            background-color: #333;
-            color: #f5f5dc;
-        }
-        
-        .actions-cell {
-            text-align: center;
-        }
-        
-        .home-link {
-            text-align: center;
-            margin-top: 20px;
-        }
-        
-        .home-link a {
-            padding: 8px 16px;
-        }
-    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
 </head>
 <body>
-<h1>Todo List</h1>
-<table>
-    <tr>
-        <th>#</th>
-        <th>Title</th>
-        <th>Description</th>
-        <th>Completed</th>
-        <th>Actions</th>
-    </tr>
-    <%
-        List<TodoModel> todos = (List<TodoModel>) request.getAttribute("todos");
-        if (todos != null && !todos.isEmpty()) {
-            int i = 1;
-            for (TodoModel todo : todos) {
-    %>
-    <tr>
-        <td><%= i %></td>
-        <td><%= todo.getTitle() %></td>
-        <td><%= todo.getDescription() %></td>
-        <td><%= todo.getCompleted() ? "Yes" : "No" %></td>
-        <td class="actions-cell">
-            <a href="EditTodoServlet?id=<%= todo.getId() %>">Edit</a>
-            <a href="DeleteTodoServlet?id=<%= todo.getId() %>">Delete</a>
-        </td>
-    </tr>
-    <% i++;
-    }
-    } else {
-    %>
-    <tr>
-        <td colspan="5">No todos found.</td>
-    </tr>
-    <%
-        }
-    %>
-</table>
-<div class="home-link">
-    <a href="${pageContext.request.contextPath}/index.jsp">Back to Home</a>
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Welcome, <%= ((model.UserModel) session.getAttribute("user")).getUsername() %>!</h2>
+        <form action="${pageContext.request.contextPath}/logout" method="post" class="d-inline">
+            <button type="submit" class="btn btn-danger">Logout</button>
+        </form>
+    </div>
+
+    <div class="list-group">
+        <%
+            List<TodoModel> todos = (List<TodoModel>) request.getAttribute("todos");
+            if (todos != null && !todos.isEmpty()) {
+                for (TodoModel todoObj : todos) {
+        %>
+        <div class="list-group-item">
+            <div>
+                <h5 class="mb-1"><%= todoObj.getTitle() %></h5>
+                <p class="mb-1"><%= todoObj.getDescription() %></p>
+                <small class="text-muted">
+                    Status: <%= todoObj.isCompleted() ? "Completed" : "Pending" %>
+                </small>
+            </div>
+            <div>
+                <a href="edit-todo?id=<%= todoObj.getId() %>" class="btn btn-warning btn-sm">Edit</a>
+                <a href="delete-todo?id=<%= todoObj.getId() %>" class="btn btn-danger btn-sm">Delete</a>
+            </div>
+        </div>
+        <%
+            }
+        } else {
+        %>
+        <p class="text-muted">No tasks found.</p>
+        <% } %>
+    </div>
+
+    <div class="d-flex justify-content-between mt-3">
+        <a href="${pageContext.request.contextPath}/view/add-todo.jsp" class="btn btn-primary">Add New Task</a>
+        <a href="${pageContext.request.contextPath}/home.jsp" class="btn btn-secondary">Back to Home</a>
+    </div>
 </div>
 </body>
 </html>

@@ -1,40 +1,55 @@
 -- Create the database if it doesn't exist
 CREATE DATABASE IF NOT EXISTS todo_database;
-
--- Use the database
 USE todo_database;
 
--- Drop the table if it exists to avoid errors
-DROP TABLE IF EXISTS todo_table;
-
--- Create the todo table
-CREATE TABLE todo_table (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(100) NOT NULL,
-    description TEXT,
-    completed BOOLEAN DEFAULT FALSE
+-- Create users table
+CREATE TABLE IF NOT EXISTS users (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    password_hash VARCHAR(64) NOT NULL,
+    salt VARCHAR(32) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
--- Insert sample data (optional)
-INSERT INTO todo_table (title, description, completed) VALUES 
-('Complete Java Assignment', 'Finish the todo application with CRUD operations', 0),
-('Buy groceries', 'Milk, eggs, bread, and vegetables', 0),
-('Read Book', 'Finish reading "Effective Java" by Joshua Bloch', 1),
-('Exercise', 'Go for a 30-minute jog', 0);
+-- Create todos table
+CREATE TABLE IF NOT EXISTS todos (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    title VARCHAR(100) NOT NULL,
+    description TEXT,
+    completed BOOLEAN DEFAULT FALSE,
+    user_id INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
 
--- Sample queries for CRUD operations
+-- Create indexes for better performance
+CREATE INDEX idx_todos_user_id ON todos(user_id);
+CREATE INDEX idx_todos_completed ON todos(completed);
+CREATE INDEX idx_users_username ON users(username);
+CREATE INDEX idx_users_email ON users(email);
 
--- Select all todos
--- SELECT * FROM todo_table;
+-- Insert sample users (password: test123)
+INSERT INTO users (username, email, password_hash, salt) VALUES 
+('testuser', 'test@example.com', 
+ '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92',
+ 'test123salt'),
+('john_doe', 'john@example.com',
+ '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92',
+ 'test123salt'),
+('jane_smith', 'jane@example.com',
+ '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92',
+ 'test123salt');
 
--- Select a specific todo by ID
--- SELECT * FROM todo_table WHERE id = 1;
-
--- Add a new todo
--- INSERT INTO todo_table (title, description, completed) VALUES ('New Todo', 'Description here', 0);
-
--- Update an existing todo
--- UPDATE todo_table SET title = 'Updated Title', description = 'Updated Description', completed = 1 WHERE id = 1;
-
--- Delete a todo
--- DELETE FROM todo_table WHERE id = 1; 
+-- Insert sample todos
+INSERT INTO todos (title, description, completed, user_id) VALUES
+('Complete Project', 'Finish the todo application project', false, 1),
+('Buy Groceries', 'Get milk, bread, and eggs', false, 1),
+('Call Mom', 'Weekly catch-up call', true, 1),
+('Review Code', 'Review pull requests for the team', false, 2),
+('Write Documentation', 'Document the new API endpoints', true, 2),
+('Plan Vacation', 'Research and plan summer vacation', false, 3),
+('Exercise', '30 minutes of cardio', true, 3),
+('Read Book', 'Read chapter 5 of the new book', false, 3);

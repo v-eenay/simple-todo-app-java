@@ -1,23 +1,25 @@
 package model;
 
 public class TodoModel {
-    //Instance Variables
-    private int id; //Primary key
+    private int id;
     private String title;
     private String description;
     private boolean completed;
+    private int userId;
 
-    public TodoModel(int id, String title, String description, boolean completed) {
+    public TodoModel(int id, String title, String description, boolean completed, int userId) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.completed = completed;
+        this.userId = userId;
     }
 
-    public TodoModel(String title, String description, boolean completed) {
+    public TodoModel(String title, String description, boolean completed, int userId) {
         this.title = title;
         this.description = description;
         this.completed = completed;
+        this.userId = userId;
     }
 
     public int getId() {
@@ -44,12 +46,20 @@ public class TodoModel {
         this.description = description;
     }
 
-    public boolean getCompleted() {
+    public boolean isCompleted() {
         return completed;
     }
 
     public void setCompleted(boolean completed) {
         this.completed = completed;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     @Override
@@ -59,6 +69,7 @@ public class TodoModel {
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", completed=" + completed +
+                ", userId=" + userId +
                 '}';
     }
 }
