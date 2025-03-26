@@ -80,6 +80,42 @@ public class TodoDAO {
         return todos;
     }
 
+    // Method to get a single todo by ID
+    public static TodoModel getTodoById(int id) {
+        String query = "SELECT * FROM todo_table WHERE id = ?";
+        try (Connection conn = getConnection(URL, USER, PASSWORD);
+             PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    String title = rs.getString("title");
+                    String description = rs.getString("description");
+                    boolean completed = rs.getBoolean("completed");
+                    return new TodoModel(id, title, description, completed);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    // Method to update an existing todo
+    public static boolean updateTodo(TodoModel todoModel) {
+        String query = "UPDATE todo_table SET title = ?, description = ?, completed = ? WHERE id = ?";
+        try (Connection conn = getConnection(URL, USER, PASSWORD);
+             PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setString(1, todoModel.getTitle());
+            ps.setString(2, todoModel.getDescription());
+            ps.setBoolean(3, todoModel.getCompleted());
+            ps.setInt(4, todoModel.getId());
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     // Main method with a menu-driven interface
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);

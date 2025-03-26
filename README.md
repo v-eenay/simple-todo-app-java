@@ -31,20 +31,19 @@ cd simple-todo-app-java
 
 ### 2. Database Setup
 
-1. Open MySQL command line or workbench
-2. Execute the following SQL commands:
+To set up the database for this application:
 
-```sql
-CREATE DATABASE todo_database;
-USE todo_database;
+1. Make sure you have MySQL installed and running
+2. Run the SQL script located in `sql/todo_database.sql` to create the database and tables:
+   ```
+   mysql -u root < sql/todo_database.sql
+   ```
+   (If your MySQL has a password, use `mysql -u root -p < sql/todo_database.sql`)
 
-CREATE TABLE todo_table (
- id INT PRIMARY KEY AUTO_INCREMENT,
- title VARCHAR(100) NOT NULL,
- description TEXT,
- completed BOOLEAN DEFAULT FALSE
-);
-```
+3. The script will:
+   - Create the `todo_database` if it doesn't exist
+   - Create the required `todo_table` with all necessary fields
+   - Insert some sample data (optional)
 
 ### 3. Configure Database Connection
 
@@ -109,6 +108,7 @@ todo-application/
 │   │   │   ├── assets/
 │   │   │   │   └── css/
 │   │   │   │       └── styles.css
+│   │   │   │
 │   │   │   └── index.jsp
 │   └── test/
 └── pom.xml
@@ -203,3 +203,10 @@ Lecturer, Itahari International College
 
 - Check the [Issues](https://github.com/v-eenay/simple-todo-app-java/issues) section
 - Contact: binaya.koirala@iic.edu.np
+
+## Features
+
+- **Create**: Add new todo items 
+- **Read**: View all todo items
+- **Update**: Edit existing todo items
+- **Delete**: Remove todo items

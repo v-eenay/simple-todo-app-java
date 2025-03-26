@@ -11,7 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/ListTodoServlet")
+@WebServlet(name = "ListTodoServlet", urlPatterns = {"/ListTodoServlet", "/list"})
 public class ListTodoServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Retrieve all todos from the database

@@ -11,7 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
 
-@WebServlet("/AddTodoServlet")
+@WebServlet(name = "AddTodoServlet", urlPatterns = {"/AddTodoServlet", "/add"})
 public class AddTodoServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Retrieve form data

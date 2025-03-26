@@ -10,7 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/DeleteTodoServlet")
+@WebServlet(name = "DeleteTodoServlet", urlPatterns = {"/DeleteTodoServlet", "/delete"})
 public class DeleteTodoServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Retrieve the todo ID from the request parameter
