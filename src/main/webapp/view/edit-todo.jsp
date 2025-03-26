@@ -1,13 +1,18 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" errorPage="error.jsp" %>
 <%@ page import="model.TodoModel" %>
 <!DOCTYPE html>
-<html>
+<html data-bs-theme="light">
 <head>
     <title>Edit Todo</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <%@ include file="/WEB-INF/common/header.jsp" %>
 </head>
 <body>
 <div class="container mt-5">
+    <div class="position-fixed top-0 end-0 p-3">
+        <button class="btn btn-outline-primary" onclick="toggleTheme()">
+            <i class="bi bi-moon-stars theme-toggle-icon"></i>
+        </button>
+    </div>
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
@@ -34,8 +39,12 @@
                             <label class="form-check-label" for="completed">Completed</label>
                         </div>
                         <div class="d-flex justify-content-between">
-                            <a href="${pageContext.request.contextPath}/todos" class="btn btn-secondary">Cancel</a>
-                            <button type="submit" class="btn btn-primary">Update Todo</button>
+                            <a href="${pageContext.request.contextPath}/todos" class="btn btn-outline-secondary">
+    <i class="bi bi-arrow-left me-2"></i>🔙 Back to My Tasks
+</a>
+                            <button type="submit" class="btn btn-primary w-100">
+    <i class="bi bi-check2-circle me-2"></i>✨ Make it Awesome! 🎨
+</button>
                         </div>
                     </form>
                 </div>
@@ -43,6 +52,6 @@
         </div>
     </div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<%@ include file="/WEB-INF/common/footer.jsp" %>
 </body>
 </html>

@@ -3,32 +3,33 @@
 <html>
 <head>
     <title>Register - Todo App</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <%@ include file="/WEB-INF/common/header.jsp" %>
 </head>
 <body>
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="text-center">Register</h3>
+<div class="container">
+    <button class="theme-toggle" onclick="toggleTheme()">
+        <span class="theme-toggle-icon">🌙</span>
+    </button>
+    <div class="card">
+        <div class="card-header">
+            <h3>Register</h3>
+        </div>
+        <div class="card-body">
+            <%
+                String error = (String) request.getAttribute("error");
+                if (error != null && !error.isEmpty()) {
+            %>
+            <div class="alert alert-danger"><%= error %></div>
+            <%
+                }
+            %>
+            <form action="${pageContext.request.contextPath}/register" method="post">
+                <div>
+                    <label for="username">Username</label>
+                    <input type="text" class="form-control" id="username" name="username" required>
                 </div>
-                <div class="card-body">
-                    <%
-                        String error = (String) request.getAttribute("error");
-                        if (error != null && !error.isEmpty()) {
-                    %>
-                    <div class="alert alert-danger"><%= error %></div>
-                    <%
-                        }
-                    %>
-                    <form action="${pageContext.request.contextPath}/register" method="post">
-                        <div class="mb-3">
-                            <label for="username" class="form-label">Username</label>
-                            <input type="text" class="form-control" id="username" name="username" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Email</label>
+                <div>
+                    <label for="email">Email</label>
                             <input type="email" class="form-control" id="email" name="email" required>
                         </div>
                         <div class="mb-3">
@@ -51,6 +52,6 @@
         </div>
     </div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<%@ include file="/WEB-INF/common/footer.jsp" %>
 </body>
 </html>

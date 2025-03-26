@@ -3,24 +3,25 @@
 <html>
 <head>
     <title>Add Todo</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <%@ include file="/WEB-INF/common/header.jsp" %>
 </head>
 <body>
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">
-                    <h3>Add Todo</h3>
+<div class="container">
+    <button class="theme-toggle" onclick="toggleTheme()">
+        <span class="theme-toggle-icon">🌙</span>
+    </button>
+    <div class="card">
+        <div class="card-header">
+            <h3>Add Todo</h3>
+        </div>
+        <div class="card-body">
+            <form action="${pageContext.request.contextPath}/add-todo" method="post">
+                <div>
+                    <label for="title">Title</label>
+                    <input type="text" class="form-control" id="title" name="title" required>
                 </div>
-                <div class="card-body">
-                    <form action="${pageContext.request.contextPath}/add-todo" method="post">
-                        <div class="mb-3">
-                            <label for="title" class="form-label">Title</label>
-                            <input type="text" class="form-control" id="title" name="title" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="description" class="form-label">Description</label>
+                <div>
+                    <label for="description">Description</label>
                             <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
                         </div>
                         <div class="mb-3 form-check">
@@ -37,6 +38,6 @@
         </div>
     </div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<%@ include file="/WEB-INF/common/footer.jsp" %>
 </body>
 </html>

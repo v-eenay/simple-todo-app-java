@@ -5,18 +5,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Todo List</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <%@ include file="/WEB-INF/common/header.jsp" %>
 </head>
 <body>
 <div class="container mt-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>Welcome, <%= ((model.UserModel) session.getAttribute("user")).getUsername() %>!</h2>
-        <form action="${pageContext.request.contextPath}/logout" method="post" class="d-inline">
-            <button type="submit" class="btn btn-danger">Logout</button>
-        </form>
+        <h2>✨ Welcome, <%= ((model.UserModel) session.getAttribute("user")).getUsername() %>! 🌟</h2>
+        <div class="d-flex gap-2">
+            <button class="theme-toggle" onclick="toggleTheme()">
+                <span class="theme-toggle-icon">🌙</span>
+            </button>
+            <form action="${pageContext.request.contextPath}/logout" method="get" class="d-inline">
+                <button type="submit" class="btn btn-danger">
+                    <i class="bi bi-box-arrow-right me-2"></i> Logout
+                </button>
+            </form>
+        </div>
     </div>
 
     <div class="list-group">
@@ -25,31 +30,49 @@
             if (todos != null && !todos.isEmpty()) {
                 for (TodoModel todoObj : todos) {
         %>
-        <div class="list-group-item">
+        <div class="list-group-item <%= todoObj.isCompleted() ? "completed-task" : "" %>">
             <div>
-                <h5 class="mb-1"><%= todoObj.getTitle() %></h5>
+                <h5 class="mb-1">
+                    <%= todoObj.isCompleted() ? "✅" : "📝" %> <%= todoObj.getTitle() %>
+                </h5>
                 <p class="mb-1"><%= todoObj.getDescription() %></p>
-                <small class="text-muted">
-                    Status: <%= todoObj.isCompleted() ? "Completed" : "Pending" %>
+                <small class="task-date">
+                    Status: <%= todoObj.isCompleted() ? "Completed 🎉" : "Pending ⏳" %>
                 </small>
             </div>
-            <div>
-                <a href="edit-todo?id=<%= todoObj.getId() %>" class="btn btn-warning btn-sm">Edit</a>
-                <a href="delete-todo?id=<%= todoObj.getId() %>" class="btn btn-danger btn-sm">Delete</a>
+            <div class="task-actions">
+                <a href="toggle-todo?id=<%=todoObj.getId()%>&userid=<%=((model.UserModel) session.getAttribute("user")).getId()%>&completed=<%=todoObj.isCompleted()%>"
+                   class="btn btn-success btn-sm me-2">
+                    <i class="bi <%= todoObj.isCompleted() ? "bi-arrow-counterclockwise" : "bi-check-circle" %>"></i> <%= todoObj.isCompleted() ? "Mark Pending 🔄" : "Mark Done ✨" %>
+                </a>
+                <a href="edit-todo?id=<%= todoObj.getId() %>" class="btn btn-warning btn-sm me-2">
+                    <i class="bi bi-pencil-square me-1"></i> Edit
+                </a>
+                <a href="delete-todo?id=<%= todoObj.getId() %>" class="btn btn-danger btn-sm">
+                    <i class="bi bi-trash me-1"></i> Delete
+                </a>
             </div>
         </div>
         <%
             }
         } else {
         %>
-        <p class="text-muted">No tasks found.</p>
+        <div class="empty-state">
+            <h3>🌱 No tasks yet!</h3>
+            <p>Time to plant some productivity seeds! Add your first task below. 🚀</p>
+        </div>
         <% } %>
     </div>
 
-    <div class="d-flex justify-content-between mt-3">
-        <a href="${pageContext.request.contextPath}/view/add-todo.jsp" class="btn btn-primary">Add New Task</a>
-        <a href="${pageContext.request.contextPath}/home.jsp" class="btn btn-secondary">Back to Home</a>
+    <div class="d-flex justify-content-between mt-4">
+        <a href="${pageContext.request.contextPath}/view/add-todo.jsp" class="btn btn-outline-primary">
+            <i class="bi bi-plus-circle me-2"></i> ✨ Add New Adventure
+        </a>
+        <a href="${pageContext.request.contextPath}/home.jsp" class="btn btn-outline-secondary">
+            <i class="bi bi-house-door me-2"></i> 🏠 Back to Base
+        </a>
     </div>
 </div>
+<%@ include file="/WEB-INF/common/footer.jsp" %>
 </body>
 </html>

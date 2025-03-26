@@ -114,4 +114,16 @@ public class TodoDAO {
             pstmt.executeUpdate();
         }
     }
+    public void toggleCompleted(int id, int userId, boolean completed) throws SQLException {
+        String sql = "UPDATE todos SET completed = ? WHERE id = ? AND user_id = ?";
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+            pstmt.setBoolean(1, !completed);
+            pstmt.setInt(2, id);
+            pstmt.setInt(3, userId);
+            
+            pstmt.executeUpdate();
+        }
+    }
 }
