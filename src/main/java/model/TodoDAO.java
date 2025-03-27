@@ -6,24 +6,6 @@ import java.util.List;
 import util.DatabaseUtil;
 
 public class TodoDAO {
-    // Instance variables for connecting to the database
-    private static final String DB_URL = "jdbc:mysql://localhost:3306/todo_db";
-    private static final String USER = "root";
-    private static final String PASS = "";
-
-    static {
-        // Load the MySQL JDBC driver
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException("Failed to load MySQL driver", e);
-        }
-    }
-
-    // Method to establish a database connection
-    private static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(DB_URL, USER, PASS);
-    }
 
     public List<TodoModel> getAllTodos(int userId) throws SQLException {
         List<TodoModel> todos = new ArrayList<>();
@@ -40,7 +22,8 @@ public class TodoDAO {
                         rs.getString("title"),
                         rs.getString("description"),
                         rs.getBoolean("completed"),
-                        rs.getInt("user_id")
+                        rs.getInt("user_id"),
+                            rs.getInt("category_id")
                     ));
                 }
             }
@@ -63,7 +46,8 @@ public class TodoDAO {
                         rs.getString("title"),
                         rs.getString("description"),
                         rs.getBoolean("completed"),
-                        rs.getInt("user_id")
+                        rs.getInt("user_id"),
+                            rs.getInt("category_id")
                     );
                 }
             }

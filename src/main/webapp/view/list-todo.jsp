@@ -1,6 +1,7 @@
 <%@ page import="model.UserModel" %>
 <%@ page import="model.TodoModel" %>
 <%@ page import="java.util.List" %>
+<%@ page import="model.CategoryDAO"%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" errorPage="error.jsp" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -30,13 +31,14 @@
             if (todos != null && !todos.isEmpty()) {
                 for (TodoModel todoObj : todos) {
         %>
-        <div class="list-group-item <%= todoObj.isCompleted() ? "completed-task" : "" %>">
+        <div class="list-group-item <%= todoObj.isCompleted() ? "completed-task" : "" %>" style="background-color: <%= CategoryDAO.getCategoryByUserId(todoObj.getCategoryId()).getColour() %>20;">
             <div>
                 <h5 class="mb-1">
                     <%= todoObj.isCompleted() ? "✅" : "📝" %> <%= todoObj.getTitle() %>
                 </h5>
                 <p class="mb-1"><%= todoObj.getDescription() %></p>
                 <small class="task-date">
+                    Category: <span class="badge" style="background-color: <%= CategoryDAO.getCategoryByUserId(todoObj.getCategoryId()).getColour() %>"><%= CategoryDAO.getCategoryByUserId(todoObj.getCategoryId()).getCategoryName() %></span><br>
                     Status: <%= todoObj.isCompleted() ? "Completed 🎉" : "Pending ⏳" %>
                 </small>
             </div>
@@ -65,9 +67,14 @@
     </div>
 
     <div class="d-flex justify-content-between mt-4">
-        <a href="${pageContext.request.contextPath}/view/add-todo.jsp" class="btn btn-outline-primary">
-            <i class="bi bi-plus-circle me-2"></i> ✨ Add New Adventure
-        </a>
+        <div>
+            <a href="${pageContext.request.contextPath}/view/add-todo.jsp" class="btn btn-outline-primary me-2">
+                <i class="bi bi-plus-circle me-2"></i> ✨ Add New Adventure
+            </a>
+            <a href="${pageContext.request.contextPath}/manage-categories" class="btn btn-outline-info">
+                <i class="bi bi-tags me-2"></i> 🎨 Manage Categories
+            </a>
+        </div>
         <a href="${pageContext.request.contextPath}/home.jsp" class="btn btn-outline-secondary">
             <i class="bi bi-house-door me-2"></i> 🏠 Back to Base
         </a>

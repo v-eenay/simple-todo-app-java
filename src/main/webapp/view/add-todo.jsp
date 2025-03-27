@@ -20,10 +20,21 @@
                     <label for="title">Title</label>
                     <input type="text" class="form-control" id="title" name="title" required>
                 </div>
-                <div>
-                    <label for="description">Description</label>
-                            <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
-                        </div>
+                <div class="mb-3">
+                <label for="description" class="form-label">Description</label>
+                <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="categoryId" class="form-label">Category</label>
+                <select class="form-control" id="categoryId" name="categoryId" required>
+                    <% 
+                        List<CategoryModel> categories = CategoryDAO.getCategoriesByUserId(((UserModel)session.getAttribute("user")).getId());
+                        for(CategoryModel category : categories) {
+                    %>
+                        <option value="<%= category.getId() %>"><%= category.getCategoryName() %></option>
+                    <% } %>
+                </select>
+            </div>
                         <div class="mb-3 form-check">
                             <input type="checkbox" class="form-check-input" id="completed" name="completed">
                             <label class="form-check-label" for="completed">Completed</label>

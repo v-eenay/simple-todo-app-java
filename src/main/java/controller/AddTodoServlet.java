@@ -39,8 +39,9 @@ public class AddTodoServlet extends HttpServlet {
         String title = request.getParameter("title");
         String description = request.getParameter("description");
         boolean completed = "on".equals(request.getParameter("completed"));
+        int categoryId = Integer.parseInt(request.getParameter("categoryId"));
 
-        TodoModel todo = new TodoModel(0, title, description, completed, user.getId());
+        TodoModel todo = new TodoModel(0, title, description, completed, user.getId(),categoryId);
         try {
             todoService.addTodo(todo);
             response.sendRedirect(request.getContextPath() + "/todos");

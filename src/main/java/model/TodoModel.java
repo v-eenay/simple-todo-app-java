@@ -6,20 +6,23 @@ public class TodoModel {
     private String description;
     private boolean completed;
     private int userId;
+    private int categoryId;
 
-    public TodoModel(int id, String title, String description, boolean completed, int userId) {
+    public TodoModel(int id, String title, String description, boolean completed, int userId, int categoryId) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.completed = completed;
         this.userId = userId;
+        this.categoryId = categoryId;
     }
 
-    public TodoModel(String title, String description, boolean completed, int userId) {
+    public TodoModel(String title, String description, boolean completed, int userId, int categoryId) {
         this.title = title;
         this.description = description;
         this.completed = completed;
         this.userId = userId;
+        this.categoryId = categoryId;
     }
 
     public int getId() {
@@ -60,6 +63,14 @@ public class TodoModel {
 
     public void setUserId(int userId) {
         this.userId = userId;
+    }
+
+    public int getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
     }
 
     @Override
