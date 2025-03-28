@@ -16,6 +16,10 @@ public class TodoService {
     public List<TodoModel> getAllTodos(int userId) throws SQLException {
         return todoDAO.getAllTodos(userId);
     }
+    
+    public List<TodoModel> getAllTodos(int userId, String sortBy, String filterStatus, Integer filterCategory) throws SQLException {
+        return todoDAO.getAllTodos(userId, sortBy, filterStatus, filterCategory);
+    }
 
     public TodoModel getTodoById(int id, int userId) throws SQLException {
         return todoDAO.getTodoById(id, userId);
@@ -32,4 +36,4 @@ public class TodoService {
     public void deleteTodo(int id, int userId) throws SQLException {
         todoDAO.deleteTodo(id, userId);
     }
-} 
+}

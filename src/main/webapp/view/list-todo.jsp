@@ -33,6 +33,51 @@
         html[data-bs-theme="dark"] .todo-item-custom {
             color: #ffffff !important;
         }
+        
+        /* Filter form styles */
+        .filter-form {
+            border: 1px solid var(--border-color);
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .filter-form select, .filter-form button {
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            padding: 0.5rem;
+            margin-right: 0.5rem;
+            border-radius: 0;
+        }
+        
+        .filter-form button {
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+        
+        .filter-form label {
+            text-transform: uppercase;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+        
+        .filter-form .filter-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        @media (max-width: 768px) {
+            .filter-form .filter-group {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .filter-form select, .filter-form button {
+                margin-bottom: 0.5rem;
+                width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
@@ -49,6 +94,57 @@
                 </button>
             </form>
         </div>
+    </div>
+
+    <!-- Filter and Sort Form -->
+    <div class="filter-form">
+        <form action="${pageContext.request.contextPath}/list-todo" method="get">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="filter-group">
+                        <label for="sort">SORT:</label>
+                        <select name="sort" id="sort" class="form-control">
+                            <option value="date_desc" <%= "date_desc".equals(request.getAttribute("currentSort")) ? "selected" : "" %>>NEWEST FIRST</option>
+                            <option value="date_asc" <%= "date_asc".equals(request.getAttribute("currentSort")) ? "selected" : "" %>>OLDEST FIRST</option>
+                            <option value="title_asc" <%= "title_asc".equals(request.getAttribute("currentSort")) ? "selected" : "" %>>TITLE A-Z</option>
+                            <option value="title_desc" <%= "title_desc".equals(request.getAttribute("currentSort")) ? "selected" : "" %>>TITLE Z-A</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="filter-group">
+                        <label for="status">STATUS:</label>
+                        <select name="status" id="status" class="form-control">
+                            <option value="all" <%= "all".equals(request.getAttribute("currentStatus")) ? "selected" : "" %>>ALL</option>
+                            <option value="pending" <%= "pending".equals(request.getAttribute("currentStatus")) ? "selected" : "" %>>PENDING</option>
+                            <option value="completed" <%= "completed".equals(request.getAttribute("currentStatus")) ? "selected" : "" %>>COMPLETED</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="filter-group">
+                        <label for="category">CATEGORY:</label>
+                        <select name="category" id="category" class="form-control">
+                            <option value="0" <%= ((Integer)0).equals(request.getAttribute("currentCategory")) ? "selected" : "" %>>ALL CATEGORIES</option>
+                            <% 
+                                List<CategoryModel> allCategories = (List<CategoryModel>) request.getAttribute("categories");
+                                if(allCategories != null) {
+                                    for(CategoryModel cat : allCategories) {
+                            %>
+                                <option value="<%= cat.getId() %>" <%= Integer.valueOf(cat.getId()).equals(request.getAttribute("currentCategory")) ? "selected" : "" %>><%= cat.getCategoryName().toUpperCase() %></option>
+                            <% 
+                                    }
+                                }
+                            %>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-2">
+                <button type="submit" class="btn btn-primary">APPLY FILTERS</button>
+                <a href="${pageContext.request.contextPath}/list-todo" class="btn btn-secondary">RESET</a>
+            </div>
+        </form>
     </div>
 
     <div class="list-group">
