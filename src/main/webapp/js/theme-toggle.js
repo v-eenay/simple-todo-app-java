@@ -6,7 +6,7 @@ function setTheme(theme) {
     const toggleIcon = document.querySelector('.theme-toggle-icon');
     
     if (theme === 'dark') {
-        themeCSS.innerHTML = `<%@ include file="/assets/css/dark.css" %>`;
+        themeCSS.innerHTML = `<%@ include file="/assets/css/retro-dark.css" %>`;
         if (toggleIcon.textContent === '🌙') {
             toggleIcon.textContent = '☀️';
         } else if (toggleIcon.classList.contains('bi')) {
@@ -15,7 +15,7 @@ function setTheme(theme) {
         }
         document.documentElement.setAttribute('data-bs-theme', 'dark');
     } else {
-        themeCSS.innerHTML = `<%@ include file="/assets/css/light.css" %>`;
+        themeCSS.innerHTML = `<%@ include file="/assets/css/retro-light.css" %>`;
         if (toggleIcon.textContent === '☀️') {
             toggleIcon.textContent = '🌙';
         } else if (toggleIcon.classList.contains('bi')) {
@@ -30,8 +30,8 @@ function setTheme(theme) {
 
     // Show a fun message when theme changes
     const themeMessage = theme === 'dark' ? 
-        'Night mode activated! Your eyes will thank you!' :
-        'Welcome back to the bright side!';
+        'DARK MODE ACTIVATED' :
+        'LIGHT MODE ACTIVATED';
     
     showThemeMessage(themeMessage);
 }
@@ -44,18 +44,22 @@ function showThemeMessage(message) {
     messageDiv.style.padding = '10px 20px';
     messageDiv.style.backgroundColor = 'var(--bg-color)';
     messageDiv.style.color = 'var(--text-color)';
-    messageDiv.style.border = '2px solid var(--border-color)';
-    messageDiv.style.borderRadius = '8px';
+    messageDiv.style.border = '1px solid var(--border-color)';
+    messageDiv.style.borderRadius = '0';
     messageDiv.style.zIndex = '1000';
     messageDiv.style.transition = 'all 0.3s ease';
+    messageDiv.style.fontFamily = 'var(--font-family)';
+    messageDiv.style.fontWeight = 'bold';
     messageDiv.textContent = message;
-
+    
     document.body.appendChild(messageDiv);
-
+    
     setTimeout(() => {
         messageDiv.style.opacity = '0';
-        setTimeout(() => messageDiv.remove(), 300);
-    }, 3000);
+        setTimeout(() => {
+            document.body.removeChild(messageDiv);
+        }, 300);
+    }, 2000);
 }
 
 function toggleTheme() {

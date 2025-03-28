@@ -1,0 +1,269 @@
+/*:root {*/
+/*    !* Light Theme Colors *!*/
+/*    --light-bg: #f8f9fa;*/
+/*    --light-card: #ffffff;*/
+/*    --light-text: #2d3436;*/
+/*    --light-accent: #0984e3;*/
+/*    --light-secondary: #6c5ce7;*/
+/*    --light-success: #00b894;*/
+/*    --light-danger: #d63031;*/
+/*    --light-border: #dfe6e9;*/
+/*    --light-shadow: rgba(0, 0, 0, 0.1);*/
+/*    */
+/*    !* Dark Theme Colors *!*/
+/*    --dark-bg: #2d3436;*/
+/*    --dark-card: #353b48;*/
+/*    --dark-text: #f5f6fa;*/
+/*    --dark-accent: #74b9ff;*/
+/*    --dark-secondary: #a29bfe;*/
+/*    --dark-success: #00cec9;*/
+/*    --dark-danger: #ff7675;*/
+/*    --dark-border: #636e72;*/
+/*    --dark-shadow: rgba(0, 0, 0, 0.3);*/
+/*}*/
+
+/*!* Base Styles *!*/
+/*body {*/
+/*    font-family: 'Inter', sans-serif;*/
+/*    font-size: 1.1rem;*/
+/*    line-height: 1.6;*/
+/*    transition: all 0.3s ease;*/
+/*}*/
+
+/*!* Light Theme *!*/
+/*body.light-theme {*/
+/*    background-color: var(--light-bg);*/
+/*    color: var(--light-text);*/
+/*}*/
+
+/*!* Dark Theme *!*/
+/*body.dark-theme {*/
+/*    background-color: var(--dark-bg);*/
+/*    color: var(--dark-text);*/
+/*}*/
+
+/*!* Typography *!*/
+/*h1, h2, h3, h4, h5, h6 {*/
+/*    font-weight: 700;*/
+/*    letter-spacing: -0.02em;*/
+/*    line-height: 1.2;*/
+/*}*/
+
+/*.display-4 {*/
+/*    font-size: 3.5rem;*/
+/*    font-weight: 800;*/
+/*}*/
+
+/*.lead {*/
+/*    font-size: 1.25rem;*/
+/*    font-weight: 400;*/
+/*}*/
+
+/*!* Cards *!*/
+/*.card {*/
+/*    border: none;*/
+/*    border-radius: 12px;*/
+/*    transition: all 0.3s ease;*/
+/*    background: var(--light-card);*/
+/*    box-shadow: 0 4px 6px var(--light-shadow);*/
+/*}*/
+
+/*.dark-theme .card {*/
+/*    background: var(--dark-card);*/
+/*    box-shadow: 0 4px 6px var(--dark-shadow);*/
+/*}*/
+
+/*.card:hover {*/
+/*    transform: translateY(-2px);*/
+/*    box-shadow: 0 8px 12px var(--light-shadow);*/
+/*}*/
+
+/*.dark-theme .card:hover {*/
+/*    box-shadow: 0 8px 12px var(--dark-shadow);*/
+/*}*/
+
+/*!* Buttons *!*/
+/*.btn {*/
+/*    font-weight: 600;*/
+/*    padding: 0.75rem 1.5rem;*/
+/*    border-radius: 8px;*/
+/*    transition: all 0.3s ease;*/
+/*    text-transform: uppercase;*/
+/*    letter-spacing: 0.5px;*/
+/*    font-size: 0.9rem;*/
+/*}*/
+
+/*.btn-primary {*/
+/*    background: var(--light-accent);*/
+/*    border: none;*/
+/*}*/
+
+/*.btn-primary:hover {*/
+/*    background: var(--light-secondary);*/
+/*    transform: translateY(-1px);*/
+/*}*/
+
+/*.dark-theme .btn-primary {*/
+/*    background: var(--dark-accent);*/
+/*}*/
+
+/*.dark-theme .btn-primary:hover {*/
+/*    background: var(--dark-secondary);*/
+/*}*/
+
+/*.btn-outline-dark {*/
+/*    border: 2px solid var(--light-text);*/
+/*    color: var(--light-text);*/
+/*}*/
+
+/*.btn-outline-dark:hover {*/
+/*    background: var(--light-text);*/
+/*    color: var(--light-bg);*/
+/*}*/
+
+/*.dark-theme .btn-outline-dark {*/
+/*    border: 2px solid var(--dark-text);*/
+/*    color: var(--dark-text);*/
+/*}*/
+
+/*.dark-theme .btn-outline-dark:hover {*/
+/*    background: var(--dark-text);*/
+/*    color: var(--dark-bg);*/
+/*}*/
+
+/*!* Form Controls *!*/
+/*.form-control {*/
+/*    padding: 0.75rem 1rem;*/
+/*    border-radius: 8px;*/
+/*    border: 2px solid var(--light-border);*/
+/*    font-size: 1rem;*/
+/*    transition: all 0.3s ease;*/
+/*}*/
+
+/*.dark-theme .form-control {*/
+/*    background: var(--dark-card);*/
+/*    border-color: var(--dark-border);*/
+/*    color: var(--dark-text);*/
+/*}*/
+
+/*.form-control:focus {*/
+/*    border-color: var(--light-accent);*/
+/*    box-shadow: 0 0 0 3px rgba(9, 132, 227, 0.1);*/
+/*}*/
+
+/*.dark-theme .form-control:focus {*/
+/*    border-color: var(--dark-accent);*/
+/*    box-shadow: 0 0 0 3px rgba(116, 185, 255, 0.1);*/
+/*}*/
+
+/*!* Theme Toggle *!*/
+/*.theme-toggle {*/
+/*    width: 40px;*/
+/*    height: 40px;*/
+/*    border-radius: 50%;*/
+/*    display: flex;*/
+/*    align-items: center;*/
+/*    justify-content: center;*/
+/*    cursor: pointer;*/
+/*    transition: all 0.3s ease;*/
+/*    background: transparent;*/
+/*    border: none;*/
+/*    padding: 0;*/
+/*}*/
+
+/*.theme-toggle i {*/
+/*    font-size: 1.5rem;*/
+/*    transition: all 0.3s ease;*/
+/*}*/
+
+/*.light-theme .theme-toggle i {*/
+/*    color: var(--light-text);*/
+/*    transform: rotate(0deg);*/
+/*}*/
+
+/*.dark-theme .theme-toggle i {*/
+/*    color: var(--dark-text);*/
+/*    transform: rotate(180deg);*/
+/*}*/
+
+/*!* Navigation *!*/
+/*.navbar {*/
+/*    padding: 1rem 0;*/
+/*    border-bottom: 2px solid var(--light-border);*/
+/*    background: var(--light-card);*/
+/*}*/
+
+/*.dark-theme .navbar {*/
+/*    border-bottom-color: var(--dark-border);*/
+/*    background: var(--dark-card);*/
+/*}*/
+
+/*.navbar-brand {*/
+/*    font-size: 1.5rem;*/
+/*    font-weight: 800;*/
+/*}*/
+
+/*!* Alerts *!*/
+/*.alert {*/
+/*    border: none;*/
+/*    border-radius: 8px;*/
+/*    padding: 1rem;*/
+/*    font-weight: 500;*/
+/*}*/
+
+/*.alert-danger {*/
+/*    background: #fff5f5;*/
+/*    color: var(--light-danger);*/
+/*}*/
+
+/*.dark-theme .alert-danger {*/
+/*    background: rgba(214, 48, 49, 0.1);*/
+/*    color: var(--dark-danger);*/
+/*}*/
+
+/*!* Todo Items *!*/
+/*.todo-item {*/
+/*    border-left: 4px solid var(--light-accent);*/
+/*    padding: 1rem;*/
+/*    margin-bottom: 1rem;*/
+/*    border-radius: 0 8px 8px 0;*/
+/*    background: var(--light-card);*/
+/*}*/
+
+/*.dark-theme .todo-item {*/
+/*    border-left-color: var(--dark-accent);*/
+/*    background: var(--dark-card);*/
+/*}*/
+
+/*.todo-item.completed {*/
+/*    border-left-color: var(--light-success);*/
+/*}*/
+
+/*.dark-theme .todo-item.completed {*/
+/*    border-left-color: var(--dark-success);*/
+/*}*/
+
+/*!* Animations *!*/
+/*@keyframes fadeIn {*/
+/*    from { opacity: 0; transform: translateY(10px); }*/
+/*    to { opacity: 1; transform: translateY(0); }*/
+/*}*/
+
+/*.fade-in {*/
+/*    animation: fadeIn 0.3s ease forwards;*/
+/*}*/
+
+/*!* Responsive Adjustments *!*/
+/*@media (max-width: 768px) {*/
+/*    .display-4 {*/
+/*        font-size: 2.5rem;*/
+/*    }*/
+/*    */
+/*    .lead {*/
+/*        font-size: 1.1rem;*/
+/*    }*/
+/*    */
+/*    .btn {*/
+/*        padding: 0.5rem 1rem;*/
+/*    }*/
+/*}*/

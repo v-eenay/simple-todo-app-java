@@ -8,36 +8,99 @@
     <title>Manage Categories</title>
     <%@ include file="/WEB-INF/common/header.jsp" %>
     <style>
+        /* Custom styles for category management */
+        :root {
+            --bg-color: #FFFFFF;
+            --border-color: #000000;
+        }
+        
         .color-preview {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
+            width: 20px;
+            height: 20px;
             display: inline-block;
             margin-right: 10px;
-            border: 2px solid var(--border-color);
+            border: 1px solid var(--border-color);
         }
+        
         .category-list {
             margin-top: 2rem;
         }
+        
         .category-item {
             display: flex;
             align-items: center;
             padding: 1rem;
             margin-bottom: 1rem;
-            border-radius: 8px;
-            background: var(--bg-secondary);
+            background: var(--bg-color);
             border: 1px solid var(--border-color);
         }
+        
         .category-name {
             flex-grow: 1;
             margin-left: 1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        
+        .card {
+            border: 1px solid var(--border-color);
+            border-radius: 0;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            background: var(--bg-color);
+        }
+        
+        .form-control {
+            border: 1px solid var(--border-color);
+            border-radius: 0;
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+            background: var(--bg-color);
+        }
+        
+        .form-label {
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        
+        h2, h4 {
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            color: var(--border-color);
+        }
+        
+        body {
+            background: var(--bg-color);
+            color: var(--border-color);
+        }
+        
+        .btn {
+            border-radius: 0;
+        }
+        
+        .btn-primary {
+            background: var(--border-color);
+            color: var(--bg-color);
+            border: 1px solid var(--border-color);
+        }
+        
+        .btn-secondary {
+            background: var(--bg-color);
+            color: var(--border-color);
+            border: 1px solid var(--border-color);
+        }
+        
+        .btn-danger {
+            background: var(--border-color);
+            color: var(--bg-color);
+            border: 1px solid var(--border-color);
         }
     </style>
 </head>
 <body>
 <div class="container mt-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>🎨 Manage Categories</h2>
+        <h2>MANAGE CATEGORIES</h2>
         <div class="d-flex gap-2">
             <button class="theme-toggle" onclick="toggleTheme()">
                 <span class="theme-toggle-icon">🌙</span>
@@ -45,50 +108,45 @@
         </div>
     </div>
 
-    <div class="card p-4 mb-4">
-        <h4>Add New Category</h4>
+    <div class="card">
+        <h4>ADD NEW CATEGORY</h4>
         <form action="${pageContext.request.contextPath}/add-category" method="post" class="needs-validation" novalidate>
             <div class="mb-3">
-                <label for="categoryName" class="form-label">Category Name</label>
+                <label for="categoryName" class="form-label">CATEGORY NAME</label>
                 <input type="text" class="form-control" id="categoryName" name="categoryName" required>
             </div>
             <div class="mb-3">
-                <label for="colour" class="form-label">Category Color</label>
-                <input type="color" class="form-control form-control-color" id="colour" name="colour" value="#E2E8F0" required>
+                <label for="categoryColor" class="form-label">COLOR</label>
+                <input type="color" class="form-control form-control-color" id="categoryColor" name="colour" value="#000000">
             </div>
-            <button type="submit" class="btn btn-primary">Add Category</button>
+            <button type="submit" class="btn btn-primary">ADD CATEGORY</button>
         </form>
     </div>
 
     <div class="category-list">
-        <h4>Your Categories</h4>
+        <h4>YOUR CATEGORIES</h4>
         <%
             List<CategoryModel> categories = (List<CategoryModel>) request.getAttribute("categories");
-            if (categories != null && !categories.isEmpty()) {
-                for (CategoryModel category : categories) {
+            if(categories != null && !categories.isEmpty()) {
+                for(CategoryModel category : categories) {
         %>
         <div class="category-item">
-            <div class="color-preview" style="background-color: <%= category.getColour() %>"></div>
-            <div class="category-name"><%= category.getCategoryName() %></div>
-            <a href="delete-category?id=<%= category.getId() %>" class="btn btn-danger btn-sm" 
-               onclick="return confirm('Are you sure you want to delete this category? Associated todos will be moved to Default category.')">
-                <i class="bi bi-trash"></i>
-            </a>
+            <div class="color-preview" style="background-color: <%= category.getColour() %>;"></div>
+            <div class="category-name"><%= category.getCategoryName().toUpperCase() %></div>
+            <a href="${pageContext.request.contextPath}/delete-category?id=<%= category.getId() %>" class="btn btn-danger btn-sm">DELETE</a>
         </div>
         <%
                 }
             } else {
         %>
         <div class="empty-state">
-            <p>No categories yet! Start by adding one above. 🎨</p>
+            <p>NO CATEGORIES FOUND. CREATE YOUR FIRST CATEGORY ABOVE.</p>
         </div>
         <% } %>
     </div>
 
-    <div class="d-flex justify-content-between mt-4">
-        <a href="${pageContext.request.contextPath}/list-todo" class="btn btn-outline-primary">
-            <i class="bi bi-arrow-left me-2"></i> Back to Todos
-        </a>
+    <div class="mt-4">
+        <a href="${pageContext.request.contextPath}/list-todo" class="btn btn-secondary">BACK TO TASKS</a>
     </div>
 </div>
 <%@ include file="/WEB-INF/common/footer.jsp" %>
